@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - تصميم المصباح</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f0f13;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* تأثير سلك المصباح من الأعلى */
+        .lamp-cord {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 2px;
+            height: 120px;
+            background: #555;
+            transform: translateX(-50%);
+        }
+
+        .lamp-bulb {
+            position: absolute;
+            top: 120px;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+            background: #ffeb3b;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 40px 15px rgba(255, 235, 59, 0.4);
+            animation: flicker 3s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.8; box-shadow: 0 0 30px 10px rgba(255, 235, 59, 0.3); }
+            100% { opacity: 1; box-shadow: 0 0 50px 20px rgba(255, 235, 59, 0.6); }
+        }
+
+        /* صندوق تسجيل الدخول المتقدم */
+        .login-card {
+            background: rgba(26, 26, 36, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            width: 380px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .login-card h2 {
+            margin-bottom: 25px;
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #a0a0b0;
+            font-size: 14px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 15, 19, 0.6);
+            color: #fff;
+            border-radius: 10px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            border-color: #00e676;
+            box-shadow: 0 0 10px rgba(0, 230, 118, 0.2);
+        }
+
+        /* زر متقدم بعيد عن اللون الأزرق (أخضر زمردي مع تأثيرات ضغط) */
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #00e676, #00b0ff);
+            border: none;
+            color: #0f0f13;
+            font-weight: bold;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 230, 118, 0.3);
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 230, 118, 0.5);
+        }
+
+        .submit-btn:active {
+            transform: translateY(1px);
+        }
+
+        #error-msg {
+            color: #ff5252;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- عناصر تصميم المصباح في الأعلى -->
+    <div class="lamp-cord"></div>
+    <div class="lamp-bulb"></div>
+
+    <div class="login-card">
+        <h2>تسجيل الدخول</h2>
+        <form id="auth-form">
+            <div class="input-group">
+                <label for="email">البريد الإلكتروني</label>
+                <input type="email" id="email" placeholder="name@example.com" required>
+            </div>
+            <div class="input-group">
+                <label for="password">كلمة المرور</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="submit-btn">دخول للنظام</button>
+            <div id="error-msg"></div>
+        </form>
+    </div>
+
+    <!-- كود ربط فايربيس -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyAF7j3fuI1PHTW2sUgcRYjQo8J5hwwV4mM",
+          authDomain: "my-store-75b70.firebaseapp.com",
+          projectId: "my-store-75b70",
+          storageBucket: "my-store-75b70.firebasestorage.app",
+          messagingSenderId: "762773021655",
+          appId: "1:762773021655:web:a4f70106e4a986c149e192",
+          measurementId: "G-C0T08334KV"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const authForm = document.getElementById('auth-form');
+        const errorMsg = document.getElementById('error-msg');
+
+        authForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    alert("تم تسجيل الدخول بنجاح!");
+                })
+                .catch((error) => {
+                    errorMsg.textContent = "خطأ: تأكد من صحة البريد وكلمة المرور.";
+                });
+        });
+    </script>
+</body>
+</html>
