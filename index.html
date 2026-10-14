@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تصفح الأباجورة التفاعلية</title>
+    <title>تسجيل الدخول - أباجورة تفاعلية</title>
     <style>
         * {
             box-sizing: border-box;
@@ -13,7 +13,7 @@
         }
 
         body {
-            background-color: #0b0b0e;
+            background-color: #121212;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -32,148 +32,117 @@
             height: 120px;
             background: #444;
             transform: translateX(-50%);
-            transition: all 0.4s ease;
         }
 
-        /* الأباجورة (زر تفاعلي متقدم) */
+        /* زر الأباجورة (مطفأة افتراضياً) */
         .lamp-bulb {
             position: absolute;
             top: 120px;
             left: 50%;
-            width: 45px;
-            height: 45px;
-            background: #ffeb3b;
+            width: 40px;
+            height: 40px;
+            background: #333; /* مطفأة في البداية */
             border-radius: 50%;
             transform: translateX(-50%);
-            box-shadow: 0 0 50px 20px rgba(255, 235, 59, 0.6);
+            box-shadow: none;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s ease;
             z-index: 20;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid #222;
         }
 
-        .lamp-bulb:hover {
-            transform: translateX(-50%) scale(1.08);
-            box-shadow: 0 0 70px 25px rgba(255, 235, 59, 0.8);
+        /* حالة إضاءة الأباجورة عند الضغط عليها */
+        .lamp-bulb.lit {
+            background: #ffeb3b;
+            box-shadow: 0 0 50px 20px rgba(255, 235, 59, 0.6);
+            border-color: rgba(255, 255, 255, 0.4);
         }
 
-        .lamp-bulb:active {
-            transform: translateX(-50%) scale(0.95);
-        }
-
-        /* حالة إطفاء الأباجورة */
-        .lamp-bulb.off {
-            background: #4a4a5a;
-            box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.8);
-            border-color: #2a2a35;
-        }
-
-        /* صندوق تسجيل الدخول (مخفي افتراضياً) */
+        /* صندوق تسجيل الدخول (مخفي تماماً بالبداية) */
         .login-card {
             position: absolute;
             top: 55%;
-            background: rgba(20, 20, 28, 0.92);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 35px 30px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
-            width: 380px;
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+            width: 350px;
             text-align: center;
             z-index: 10;
             opacity: 0;
-            transform: translateY(-20px) scale(0.95);
+            transform: translateY(-20px);
             pointer-events: none;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s ease;
         }
 
         /* إظهار صندوق تسجيل الدخول */
         .login-card.show {
             opacity: 1;
-            transform: translateY(0) scale(1);
+            transform: translateY(0);
             pointer-events: auto;
         }
 
         .login-card h2 {
-            margin-bottom: 22px;
-            color: #ffffff;
-            font-size: 22px;
-            font-weight: 500;
+            margin-bottom: 20px;
+            color: #fff;
         }
 
-        .input-group {
-            margin-bottom: 18px;
+        .form-group {
+            margin-bottom: 15px;
             text-align: right;
         }
 
-        .input-group label {
+        .form-group label {
             display: block;
-            margin-bottom: 6px;
-            color: #8f8f9e;
-            font-size: 13px;
+            margin-bottom: 5px;
+            color: #bbb;
         }
 
-        .input-group input {
+        .form-group input {
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(10, 10, 14, 0.7);
+            padding: 10px;
+            border: 1px solid #444;
+            background: #2a2a2a;
             color: #fff;
-            border-radius: 10px;
+            border-radius: 6px;
             outline: none;
-            transition: all 0.3s ease;
         }
 
-        .input-group input:focus {
-            border-color: #00e676;
-            box-shadow: 0 0 12px rgba(0, 230, 118, 0.25);
+        .form-group input:focus {
+            border-color: #ffc107;
         }
 
-        /* زر متقدم ومميز (غير تقليدي) */
-        .submit-btn {
+        /* زر الدخول بتصميم أنيق ومتقدم بدون لون أزرق مزعج */
+        .login-btn {
             width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #00e676, #00b0ff);
+            padding: 10px;
+            background: #ffc107;
             border: none;
-            color: #0b0b0e;
+            color: #000;
             font-weight: bold;
-            font-size: 15px;
-            border-radius: 10px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 230, 118, 0.25);
-            margin-top: 8px;
+            margin-top: 10px;
+            transition: background 0.3s ease;
         }
 
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 230, 118, 0.4);
+        .login-btn:hover {
+            background: #e0a800;
         }
 
-        .submit-btn:active {
-            transform: translateY(1px);
+        #error-message {
+            color: #ff4d4d;
+            margin-top: 10px;
+            font-size: 14px;
         }
 
-        #error-msg {
-            color: #ff5252;
-            margin-top: 12px;
-            font-size: 13px;
-        }
-
-        /* واجهة الترحيب بعد تسجيل الدخول */
+        /* واجهة الموقع بعد تسجيل الدخول */
         #welcome-screen {
             text-align: center;
             display: none;
         }
-
         #welcome-screen.show {
             display: block;
-        }
-
-        #welcome-screen h1 {
-            color: #00e676;
-            margin-bottom: 10px;
-            font-size: 26px;
         }
     </style>
 </head>
@@ -181,33 +150,33 @@
 
     <!-- سلك والأباجورة -->
     <div class="lamp-cord"></div>
-    <div class="lamp-bulb" id="lamp-toggle" title="اضغط لتشغيل/إطفاء المصباح"></div>
+    <div class="lamp-bulb" id="lamp-toggle" title="اضغط لتشغيل المصباح"></div>
 
-    <!-- نافذة تسجيل الدخول (مخفية بالافتراضي) -->
+    <!-- نافذة تسجيل الدخول -->
     <div class="login-card" id="login-container">
         <h2>تسجيل الدخول</h2>
-        <form id="auth-form">
-            <div class="input-group">
+        <form id="login-form">
+            <div class="form-group">
                 <label for="email">البريد الإلكتروني</label>
-                <input type="email" id="email" placeholder="name@example.com" required>
+                <input type="email" id="email" placeholder="أدخل البريد الإلكتروني" required>
             </div>
-            <div class="input-group">
+            <div class="form-group">
                 <label for="password">كلمة المرور</label>
-                <input type="password" id="password" placeholder="••••••••" required>
+                <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
             </div>
-            <button type="submit" class="submit-btn">دخول للنظام</button>
-            <div id="error-msg"></div>
+            <button type="submit" class="login-btn">دخول</button>
+            <div id="error-message"></div>
         </form>
     </div>
 
     <!-- واجهة الموقع بعد تسجيل الدخول -->
     <div id="welcome-screen">
-        <h1>مرحباً بك في لوحة التحكم!</h1>
-        <p style="color: #a0a0b0;">تم تسجيل الدخول بنجاح عبر فايربيس.</p>
-        <button class="submit-btn" id="logout-btn" style="margin-top: 20px; background: linear-gradient(135deg, #ff5252, #ff1744); color: #fff;">تسجيل الخروج</button>
+        <h2 style="color: #ffc107; margin-bottom: 10px;">أهلاً بك في موقعك!</h2>
+        <p>تم تسجيل الدخول بنجاح عبر فايربيس.</p>
+        <button class="login-btn" id="logout-btn" style="margin-top: 20px; background: #ff4d4d; color: #fff;">تسجيل الخروج</button>
     </div>
 
-    <!-- كود فايربيس والتحكم بالحركة -->
+    <!-- كود فايربيس والتفاعل -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -228,47 +197,46 @@
         const lampToggle = document.getElementById('lamp-toggle');
         const loginContainer = document.getElementById('login-container');
         const welcomeScreen = document.getElementById('welcome-screen');
-        const authForm = document.getElementById('auth-form');
-        const errorMsg = document.getElementById('error-msg');
+        const loginForm = document.getElementById('login-form');
+        const errorMessage = document.getElementById('error-message');
         const logoutBtn = document.getElementById('logout-btn');
 
-        // التفاعل مع الضغط على الأباجورة (إظهار/إطفاء وإظهار/إخفاء نموذج الدخول)
+        // التفاعل مع الضغط على الأباجورة (تشغيل/إطفاء وإظهار/إخفاء)
         lampToggle.addEventListener('click', () => {
-            // إذا كنا في شاشة الترحيب بعد الدخول، لا نتحكم بالأباجورة
             if (welcomeScreen.classList.contains('show')) return;
 
-            lampToggle.classList.toggle('off');
+            lampToggle.classList.toggle('lit');
             loginContainer.classList.toggle('show');
         });
 
-        // عملية تسجيل الدخول عبر فايربيس
-        authForm.addEventListener('submit', (e) => {
+        // تسجيل الدخول عبر فايربيس
+        loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
             signInWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
-                    // إخفاء الأباجورة ونموذج الدخول وعرض شاشة الترحيب
+                    // إخفاء الأباجورة ونموذج الدخول وعرض الموقع
                     lampToggle.style.display = 'none';
                     document.querySelector('.lamp-cord').style.display = 'none';
                     loginContainer.classList.remove('show');
                     welcomeScreen.classList.add('show');
                 })
                 .catch((error) => {
-                    errorMsg.textContent = "خطأ: تأكد من صحة البريد أو كلمة المرور.";
+                    errorMessage.textContent = "خطأ في البريد أو كلمة المرور.";
                 });
         });
 
-        // زر تسجيل الخروج للعودة للحالة الأولية
+        // تسجيل الخروج
         logoutBtn.addEventListener('click', () => {
             signOut(auth).then(() => {
                 welcomeScreen.classList.remove('show');
                 lampToggle.style.display = 'block';
                 document.querySelector('.lamp-cord').style.display = 'block';
-                lampToggle.classList.remove('off');
-                authForm.reset();
-                errorMsg.textContent = '';
+                lampToggle.classList.remove('lit');
+                loginForm.reset();
+                errorMessage.textContent = '';
             });
         });
     </script>
