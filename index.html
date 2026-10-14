@@ -3,263 +3,571 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول - تفاعل متقدم</title>
+    <title>King Store - متجر الملوك</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#030712">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #38bdf8;
+            --primary-glow: rgba(56, 189, 248, 0.25);
+            --bg-main: #030712;
+            --card-bg: rgba(15, 23, 42, 0.75);
+            --border-glass: rgba(56, 189, 248, 0.2);
+        }
+
+        body.theme-blue { --primary: #38bdf8; --primary-glow: rgba(56, 189, 248, 0.25); }
+        body.theme-purple { --primary: #c084fc; --primary-glow: rgba(192, 132, 252, 0.25); }
+        body.theme-emerald { --primary: #34d399; --primary-glow: rgba(52, 211, 153, 0.25); }
+        body.theme-amber { --primary: #fbbf24; --primary-glow: rgba(255, 191, 36, 0.25); }
+        body.theme-rose { --primary: #fb7185; --primary-glow: rgba(251, 113, 133, 0.25); }
+
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent !important;
+            user-select: none;
         }
 
         body {
-            background-color: #121212;
+            background: radial-gradient(circle at 50% 0%, #0f172a 0%, var(--bg-main) 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* شاشة تسجيل الدخول */
+        #login-screen {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow-y: auto;
-            position: relative;
-            color: #fff;
-            padding: 20px 0;
+            padding: 20px;
         }
 
-        /* سلك الأباجورة */
-        .lamp-cord {
-            width: 2px;
-            height: 80px;
-            background: #555;
-            flex-shrink: 0;
-        }
-
-        /* زر الأباجورة بتفاعل متقدم (مطفأة افتراضياً) */
-        .lamp-bulb {
-            width: 45px;
-            height: 45px;
-            background: #25252b;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 20;
-            border: 2px solid #3a3a45;
-            flex-shrink: 0;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .lamp-bulb:hover {
-            transform: scale(1.08);
-            border-color: #ffc107;
-        }
-
-        .lamp-bulb:active {
-            transform: scale(0.92);
-        }
-
-        /* حالة إضاءة الأباجورة */
-        .lamp-bulb.lit {
-            background: #ffeb3b;
-            box-shadow: 0 0 50px 20px rgba(255, 235, 59, 0.5), inset 0 0 10px rgba(255,255,255,0.8);
-            border-color: #fff;
-        }
-
-        /* صندوق تسجيل الدخول */
         .login-card {
-            background: #1e1e1e;
-            padding: 25px 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-            width: 360px;
+            width: 100%;
+            max-width: 400px;
+            padding: 45px 30px;
+            background: var(--card-bg);
+            backdrop-filter: blur(25px);
+            border-radius: 32px;
+            border: 1px solid var(--border-glass);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
             text-align: center;
-            z-index: 10;
-            opacity: 0;
-            transform: translateY(-15px);
-            pointer-events: none;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            display: none;
-            border: 1px solid rgba(255,255,255,0.08);
         }
 
-        .login-card.show {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-            display: block;
+        .logo-box {
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 25px auto;
+            border-radius: 50%;
+            padding: 3px;
+            background: linear-gradient(135deg, var(--primary), #1e3a8a);
+            box-shadow: 0 0 30px var(--primary-glow);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .login-card h2 {
-            margin-bottom: 20px;
-            color: #fff;
+        .logo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            background: #020617;
+        }
+
+        .login-title {
             font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
         }
 
-        .form-group {
-            margin-bottom: 15px;
+        .login-desc {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .google-signin-btn {
+            width: 100%;
+            padding: 14px;
+            background: rgba(30, 41, 59, 0.7);
+            color: #ffffff;
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.25s ease;
+        }
+
+        .google-signin-btn:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .google-signin-btn i { color: #ea4335; font-size: 18px; }
+
+        /* الشاشة الترحيبية (٣ ثواني) */
+        #splash-screen {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #030712;
+            z-index: 5000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .splash-inner {
+            padding: 40px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--border-glass);
+            border-radius: 36px;
+            box-shadow: 0 0 60px var(--primary-glow);
+            max-width: 340px;
+            width: 90%;
+        }
+
+        .splash-inner img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 25px var(--primary-glow);
+        }
+
+        .splash-inner h2 {
+            font-size: 20px;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .splash-inner p {
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        /* واجهة المتجر الرئيسية */
+        #store-screen { display: none; min-height: 100vh; position: relative; }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-glass);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .settings-icon-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--border-glass);
+            color: var(--primary);
+            font-size: 17px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .settings-dropdown {
+            display: none;
+            position: absolute;
+            top: 68px;
+            left: 20px;
+            width: 270px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 22px;
+            padding: 18px;
+            z-index: 101;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+        }
+
+        .settings-dropdown.active { display: block; }
+
+        .user-info-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 14px;
+        }
+
+        .user-avatar-img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            object-fit: cover;
+        }
+
+        .user-name-txt {
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 145px;
+        }
+
+        .logout-action {
+            font-size: 11px;
+            color: #f87171;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 3px;
+            display: inline-block;
+        }
+        .logout-action:hover { text-decoration: underline; }
+
+        .colors-label { font-size: 11px; color: #94a3b8; margin-bottom: 6px; text-align: right; }
+        .colors-row {
+            display: flex;
+            justify-content: space-between;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 12px;
+        }
+
+        .color-circle {
+            width: 26px; height: 26px; border-radius: 50%; cursor: pointer;
+            border: 2px solid rgba(255,255,255,0.25);
+        }
+        .color-circle.blue { background: #38bdf8; }
+        .color-circle.purple { background: #c084fc; }
+        .color-circle.emerald { background: #34d399; }
+        .color-circle.amber { background: #fbbf24; }
+        .color-circle.rose { background: #fb7185; }
+
+        .dropdown-link-item {
+            width: 100%;
+            padding: 11px 12px;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            color: #e2e8f0;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            margin-bottom: 8px;
+            text-decoration: none;
             text-align: right;
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            color: #bbb;
-            font-size: 14px;
+        .dropdown-link-item.danger-item {
+            color: #f87171;
+            background: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.15);
         }
+        .dropdown-link-item.danger-item i { color: #f87171; }
 
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #444;
-            background: #2a2a2a;
-            color: #fff;
-            border-radius: 10px;
-            outline: none;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus {
-            border-color: #ffc107;
-            box-shadow: 0 0 8px rgba(255, 193, 7, 0.3);
-        }
-
-        /* زر دخول بتفاعل متقدم وانيميشن استجابة للضغط */
-        .login-btn {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #ffc107, #ff9800);
-            border: none;
-            color: #000;
-            font-weight: bold;
-            font-size: 15px;
-            border-radius: 10px;
+        /* زر الدردشة العائم */
+        .chat-float-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #1e3a8a);
+            color: #ffffff;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 30px var(--primary-glow);
             cursor: pointer;
-            margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            -webkit-tap-highlight-color: transparent;
+            z-index: 1000;
+            transition: transform 0.2s ease;
         }
+        .chat-float-btn:hover { transform: scale(1.08); }
 
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 193, 7, 0.5);
-            background: linear-gradient(135deg, #ffca28, #ffa726);
-        }
-
-        .login-btn:active {
-            transform: translateY(2px) scale(0.98);
-            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
-        }
-
-        #error-message {
-            color: #ff5252;
-            margin-top: 10px;
-            font-size: 13px;
-        }
-
-        /* واجهة الموقع بعد تسجيل الدخول */
-        #welcome-screen {
-            text-align: center;
+        /* نافذة الدردشة الحية (Discord Style) */
+        .chat-modal-container {
             display: none;
-            margin-top: 20px;
+            position: fixed;
+            bottom: 95px;
+            right: 25px;
+            width: 350px;
+            height: 480px;
+            background: rgba(15, 23, 42, 0.96);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            z-index: 1001;
+            flex-direction: column;
+            overflow: hidden;
+            animation: scaleUpChat 0.25s ease;
         }
-        #welcome-screen.show {
-            display: block;
+        .chat-modal-container.active { display: flex; }
+
+        @keyframes scaleUpChat {
+            from { opacity: 0; transform: translateY(15px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
+
+        .chat-header {
+            padding: 15px 20px;
+            background: rgba(30, 41, 59, 0.8);
+            border-bottom: 1px solid var(--border-glass);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-header h4 { font-size: 14px; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+        .chat-close-btn { background: none; border: none; color: #94a3b8; font-size: 16px; cursor: pointer; }
+        .chat-close-btn:hover { color: #fff; }
+
+        .chat-messages-area {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: rgba(2, 6, 23, 0.4);
+        }
+
+        .chat-msg-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .chat-msg-avatar {
+            width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1px solid var(--primary); flex-shrink: 0;
+        }
+        .chat-msg-content {
+            background: rgba(30, 41, 59, 0.7);
+            padding: 10px 14px;
+            border-radius: 14px;
+            max-width: 240px;
+            word-break: break-word;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .chat-msg-username { font-size: 11px; color: var(--primary); font-weight: 600; margin-bottom: 3px; }
+        .chat-msg-text { font-size: 12px; color: #f1f5f9; line-height: 1.4; }
+
+        .chat-input-area {
+            padding: 12px 15px;
+            background: rgba(15, 23, 42, 0.9);
+            border-top: 1px solid var(--border-glass);
+            display: flex;
+            gap: 10px;
+        }
+        .chat-input-field {
+            flex-grow: 1;
+            padding: 10px 14px;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 12px;
+        }
+        .chat-input-field:focus { border-color: var(--primary); }
+        .chat-send-btn {
+            background: var(--primary);
+            color: #030712;
+            border: none;
+            width: 40px;
+            border-radius: 12px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* نافذة تأكيد الحذف */
+        #delete-alert-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(3, 7, 18, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 6000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .alert-box-content {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            padding: 30px 25px;
+            border-radius: 26px;
+            text-align: center;
+            max-width: 340px;
+            width: 100%;
+        }
+
+        .alert-box-content h3 { color: #f87171; font-size: 17px; margin-bottom: 8px; }
+        .alert-box-content p { color: #94a3b8; font-size: 12px; margin-bottom: 22px; line-height: 1.5; }
+
+        .alert-btns-row { display: flex; gap: 10px; }
+        .alert-btn { flex: 1; padding: 11px; border-radius: 12px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; }
+        .alert-btn-cancel { background: rgba(30, 41, 59, 0.8); color: #fff; }
+        .alert-btn-confirm { background: #ef4444; color: #fff; }
+
+        .purchases-main-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 75px);
+            text-align: center;
+        }
+
+        .purchases-main-area h1 {
+            font-size: 30px;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 0 25px var(--primary-glow);
+        }
+
+        #auth-error-msg { color: #f87171; font-size: 12px; text-align: center; margin-top: 15px; }
     </style>
 </head>
-<body>
+<body class="theme-blue">
 
-    <!-- سلك والأباجورة -->
-    <div class="lamp-cord"></div>
-    <div class="lamp-bulb" id="lamp-toggle" title="اضغط لتشغيل المصباح وإظهار نموذج الدخول"></div>
-
-    <!-- نافذة تسجيل الدخول -->
-    <div class="login-card" id="login-container">
-        <h2>تسجيل الدخول</h2>
-        <form id="login-form">
-            <div class="form-group">
-                <label for="email">البريد الإلكتروني</label>
-                <input type="email" id="email" placeholder="أدخل البريد الإلكتروني" required>
+    <!-- شاشة تسجيل الدخول -->
+    <div id="login-screen">
+        <div class="login-card">
+            <div class="logo-box">
+                <img src="file_000000006a0881f4ab25ca2d85fb53a0.png" alt="Logo">
             </div>
-            <div class="form-group">
-                <label for="password">كلمة المرور</label>
-                <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
-            </div>
-            <button type="submit" class="login-btn">دخول للنظام</button>
-            <div id="error-message"></div>
-        </form>
+            <div class="login-title">مرحباً بك مجدداً</div>
+            <p class="login-desc">سجل دخولك الآن واستمتع بتجربة تسوق ذكية وآمنة.</p>
+            <button id="google-login-btn" class="google-signin-btn">
+                <i class="fa-brands fa-google"></i>
+                <span>Continue with Google</span>
+            </button>
+            <p id="auth-error-msg"></p>
+        </div>
     </div>
 
-    <!-- واجهة الموقع بعد تسجيل الدخول -->
-    <div id="welcome-screen">
-        <h2 style="color: #ffc107; margin-bottom: 10px;">أهلاً بك!</h2>
-        <p>تم تسجيل الدخول بنجاح عبر فايربيس.</p>
-        <button class="login-btn" id="logout-btn" style="margin-top: 20px; background: linear-gradient(135deg, #ff5252, #e53935); color: #fff; box-shadow: 0 4px 15px rgba(255,82,82,0.3);">تسجيل الخروج</button>
+    <!-- الشاشة الترحيبية (٣ ثواني) -->
+    <div id="splash-screen">
+        <div class="splash-inner">
+            <img src="file_000000006a0881f4ab25ca2d85fb53a0.png" alt="Logo">
+            <h2>مرحباً بكم في متجر King Store</h2>
+            <p>جاري تهيئة وتجهيز متجرك الملكي...</p>
+        </div>
     </div>
 
-    <!-- كود فايربيس والتفاعل -->
+    <!-- نافذة تأكيد حذف البيانات -->
+    <div id="delete-alert-modal">
+        <div class="alert-box-content">
+            <h3>⚠️ تحذير هام</h3>
+            <p>لا يمكن استرجاع البيانات نهائياً. هل أنت متأكد من رغبتك في حذف بيانات هذا الحساب؟</p>
+            <div class="alert-btns-row">
+                <button id="cancel-delete-action" class="alert-btn alert-btn-cancel">إلغاء</button>
+                <button id="confirm-delete-action" class="alert-btn alert-btn-confirm">تأكيد الحذف</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- واجهة المتجر الرئيسية -->
+    <div id="store-screen">
+        <header>
+            <div class="brand-title">King Store 👑</div>
+            <div style="position: relative;">
+                <button id="settings-trigger-btn" class="settings-icon-btn">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+                <div id="settings-popup-menu" class="settings-dropdown">
+                    <div class="user-info-box">
+                        <img id="menu-user-img" src="" alt="User" class="user-avatar-img">
+                        <div style="overflow: hidden; text-align: right; flex-grow: 1;">
+                            <div id="menu-user-name" class="user-name-txt">اسم المستخدم</div>
+                            <span id="menu-logout-trigger" class="logout-action">تسجيل الخروج</span>
+                        </div>
+                    </div>
+                    <div class="colors-label">تخصيص ألوان الموقع:</div>
+                    <div class="colors-row">
+                        <div class="color-circle blue" onclick="changeTheme('theme-blue')"></div>
+                        <div class="color-circle purple" onclick="changeTheme('theme-purple')"></div>
+                        <div class="color-circle emerald" onclick="changeTheme('theme-emerald')"></div>
+                        <div class="color-circle amber" onclick="changeTheme('theme-amber')"></div>
+                        <div class="color-circle rose" onclick="changeTheme('theme-rose')"></div>
+                    </div>
+                    <a id="support-wa-link" href="#" target="_blank" class="dropdown-link-item">
+                        <i class="fa-brands fa-whatsapp" style="color: #25d366; font-size: 16px;"></i>
+                        <span>مركز الدعم الفني</span>
+                    </a>
+                    <button id="trigger-delete-modal" class="dropdown-link-item danger-item">
+                        <i class="fa-solid fa-trash-can"></i>
+                        <span>حذف بيانات الحساب</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="purchases-main-area">
+            <h1>المشتريات</h1>
+        </div>
+
+        <!-- زر الدردشة العائم -->
+        <button id="chat-float-btn" class="chat-float-btn" title="مجتمع الملك - الدردشة">
+            <i class="fa-solid fa-comments"></i>
+        </button>
+
+        <!-- نافذة الدردشة الحية -->
+        <div id="chat-modal-container" class="chat-modal-container">
+            <div class="chat-header">
+                <h4><i class="fa-solid fa-hashtag"></i> دردشة مجتمع الملوك</h4>
+                <button id="chat-close-btn" class="chat-close-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="chat-messages-area" class="chat-messages-area">
+                <!-- الرسائل الحية للجميع ستظهر هنا -->
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input-field" class="chat-input-field" placeholder="اكتب رسالتك هنا...">
+                <button id="chat-send-btn" class="chat-send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-        const firebaseConfig = {
-          apiKey: "AIzaSyAF7j3fuI1PHTW2sUgcRYjQo8J5hwwV4mM",
-          authDomain: "my-store-75b70.firebaseapp.com",
-          projectId: "my-store-75b70",
-          storageBucket: "my-store-75b70.firebasestorage.app",
-          messagingSenderId: "762773021655",
-          appId: "1:762773021655:web:a4f70106e4a986c149e192",
-          measurementId: "G-C0T08334KV"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        const lampToggle = document.getElementById('lamp-toggle');
-        const loginContainer = document.getElementById('login-container');
-        const welcomeScreen = document.getElementById('welcome-screen');
-        const loginForm = document.getElementById('login-form');
-        const errorMessage = document.getElementById('error-message');
-        const logoutBtn = document.getElementById('logout-btn');
-
-        // التفاعل المتقدم مع الأباجورة
-        lampToggle.addEventListener('click', () => {
-            if (welcomeScreen.classList.contains('show')) return;
-
-            lampToggle.classList.toggle('lit');
-            loginContainer.classList.toggle('show');
-        });
-
-        // تسجيل الدخول عبر فايربيس
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    lampToggle.style.display = 'none';
-                    document.querySelector('.lamp-cord').style.display = 'none';
-                    loginContainer.classList.remove('show');
-                    welcomeScreen.classList.add('show');
-                })
-                .catch((error) => {
-                    errorMessage.textContent = "خطأ في البريد أو كلمة المرور.";
-                });
-        });
-
-        // تسجيل الخروج
-        logoutBtn.addEventListener('click', () => {
-            signOut(auth).then(() => {
-                welcomeScreen.classList.remove('show');
-                lampToggle.style.display = 'block';
-                document.querySelector('.lamp-cord').style.display = 'block';
-                lampToggle.classList.remove('lit');
-                loginForm.reset();
-                errorMessage.textContent = '';
-            });
-        });
-    </script>
-</body>
-</html>
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/
