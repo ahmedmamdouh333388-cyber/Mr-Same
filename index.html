@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول - أباجورة تفاعلية</title>
+    <title>تسجيل الدخول - تفاعل متقدم</title>
     <style>
         * {
             box-sizing: border-box;
@@ -21,56 +21,66 @@
             overflow-y: auto;
             position: relative;
             color: #fff;
-            padding-bottom: 40px;
+            padding: 20px 0;
         }
 
         /* سلك الأباجورة */
         .lamp-cord {
             width: 2px;
-            height: 90px;
-            background: #444;
+            height: 80px;
+            background: #555;
             flex-shrink: 0;
         }
 
-        /* زر الأباجورة (مطفأة افتراضياً) */
+        /* زر الأباجورة بتفاعل متقدم (مطفأة افتراضياً) */
         .lamp-bulb {
-            width: 40px;
-            height: 40px;
-            background: #333;
+            width: 45px;
+            height: 45px;
+            background: #25252b;
             border-radius: 50%;
-            box-shadow: none;
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 20;
-            border: 2px solid #222;
+            border: 2px solid #3a3a45;
             flex-shrink: 0;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* حالة إضاءة الأباجورة عند الضغط عليها */
+        .lamp-bulb:hover {
+            transform: scale(1.08);
+            border-color: #ffc107;
+        }
+
+        .lamp-bulb:active {
+            transform: scale(0.92);
+        }
+
+        /* حالة إضاءة الأباجورة */
         .lamp-bulb.lit {
             background: #ffeb3b;
-            box-shadow: 0 0 50px 20px rgba(255, 235, 59, 0.6);
-            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 50px 20px rgba(255, 235, 59, 0.5), inset 0 0 10px rgba(255,255,255,0.8);
+            border-color: #fff;
         }
 
-        /* صندوق تسجيل الدخول (مخفي تماماً بالبداية) */
+        /* صندوق تسجيل الدخول */
         .login-card {
             background: #1e1e1e;
             padding: 25px 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.7);
-            width: 350px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            width: 360px;
             text-align: center;
             z-index: 10;
             opacity: 0;
             transform: translateY(-15px);
             pointer-events: none;
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: none;
+            border: 1px solid rgba(255,255,255,0.08);
         }
 
-        /* إظهار صندوق تسجيل الدخول ورفع المحتوى للأعلى ليظهر الزر بوضوح */
         .login-card.show {
             opacity: 1;
             transform: translateY(0);
@@ -79,58 +89,71 @@
         }
 
         .login-card h2 {
-            margin-bottom: 18px;
+            margin-bottom: 20px;
             color: #fff;
-            font-size: 20px;
+            font-size: 22px;
         }
 
         .form-group {
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             text-align: right;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             color: #bbb;
             font-size: 14px;
         }
 
         .form-group input {
             width: 100%;
-            padding: 10px;
+            padding: 12px 15px;
             border: 1px solid #444;
             background: #2a2a2a;
             color: #fff;
-            border-radius: 6px;
+            border-radius: 10px;
             outline: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
         }
 
         .form-group input:focus {
             border-color: #ffc107;
+            box-shadow: 0 0 8px rgba(255, 193, 7, 0.3);
         }
 
-        /* زر الدخول */
+        /* زر دخول بتفاعل متقدم وانيميشن استجابة للضغط */
         .login-btn {
             width: 100%;
-            padding: 10px;
-            background: #ffc107;
+            padding: 12px;
+            background: linear-gradient(135deg, #ffc107, #ff9800);
             border: none;
             color: #000;
             font-weight: bold;
-            border-radius: 6px;
+            font-size: 15px;
+            border-radius: 10px;
             cursor: pointer;
             margin-top: 10px;
-            transition: background 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            -webkit-tap-highlight-color: transparent;
         }
 
         .login-btn:hover {
-            background: #e0a800;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 193, 7, 0.5);
+            background: linear-gradient(135deg, #ffca28, #ffa726);
+        }
+
+        .login-btn:active {
+            transform: translateY(2px) scale(0.98);
+            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
         }
 
         #error-message {
-            color: #ff4d4d;
-            margin-top: 8px;
+            color: #ff5252;
+            margin-top: 10px;
             font-size: 13px;
         }
 
@@ -149,7 +172,7 @@
 
     <!-- سلك والأباجورة -->
     <div class="lamp-cord"></div>
-    <div class="lamp-bulb" id="lamp-toggle" title="اضغط لتشغيل المصباح"></div>
+    <div class="lamp-bulb" id="lamp-toggle" title="اضغط لتشغيل المصباح وإظهار نموذج الدخول"></div>
 
     <!-- نافذة تسجيل الدخول -->
     <div class="login-card" id="login-container">
@@ -163,16 +186,16 @@
                 <label for="password">كلمة المرور</label>
                 <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
             </div>
-            <button type="submit" class="login-btn">دخول</button>
+            <button type="submit" class="login-btn">دخول للنظام</button>
             <div id="error-message"></div>
         </form>
     </div>
 
     <!-- واجهة الموقع بعد تسجيل الدخول -->
     <div id="welcome-screen">
-        <h2 style="color: #ffc107; margin-bottom: 10px;">أهلاً بك في موقعك!</h2>
+        <h2 style="color: #ffc107; margin-bottom: 10px;">أهلاً بك!</h2>
         <p>تم تسجيل الدخول بنجاح عبر فايربيس.</p>
-        <button class="login-btn" id="logout-btn" style="margin-top: 20px; background: #ff4d4d; color: #fff;">تسجيل الخروج</button>
+        <button class="login-btn" id="logout-btn" style="margin-top: 20px; background: linear-gradient(135deg, #ff5252, #e53935); color: #fff; box-shadow: 0 4px 15px rgba(255,82,82,0.3);">تسجيل الخروج</button>
     </div>
 
     <!-- كود فايربيس والتفاعل -->
@@ -200,7 +223,7 @@
         const errorMessage = document.getElementById('error-message');
         const logoutBtn = document.getElementById('logout-btn');
 
-        // التفاعل مع الضغط على الأباجورة
+        // التفاعل المتقدم مع الأباجورة
         lampToggle.addEventListener('click', () => {
             if (welcomeScreen.classList.contains('show')) return;
 
