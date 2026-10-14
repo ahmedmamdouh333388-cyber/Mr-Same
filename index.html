@@ -15,40 +15,36 @@
         body {
             background-color: #121212;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            overflow-y: auto;
             position: relative;
             color: #fff;
+            padding-bottom: 40px;
         }
 
         /* سلك الأباجورة */
         .lamp-cord {
-            position: absolute;
-            top: 0;
-            left: 50%;
             width: 2px;
-            height: 120px;
+            height: 90px;
             background: #444;
-            transform: translateX(-50%);
+            flex-shrink: 0;
         }
 
         /* زر الأباجورة (مطفأة افتراضياً) */
         .lamp-bulb {
-            position: absolute;
-            top: 120px;
-            left: 50%;
             width: 40px;
             height: 40px;
-            background: #333; /* مطفأة في البداية */
+            background: #333;
             border-radius: 50%;
-            transform: translateX(-50%);
             box-shadow: none;
             cursor: pointer;
             transition: all 0.4s ease;
             z-index: 20;
             border: 2px solid #222;
+            flex-shrink: 0;
+            margin-bottom: 25px;
         }
 
         /* حالة إضاءة الأباجورة عند الضغط عليها */
@@ -60,35 +56,36 @@
 
         /* صندوق تسجيل الدخول (مخفي تماماً بالبداية) */
         .login-card {
-            position: absolute;
-            top: 55%;
             background: #1e1e1e;
-            padding: 30px;
+            padding: 25px 30px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.7);
             width: 350px;
             text-align: center;
             z-index: 10;
             opacity: 0;
-            transform: translateY(-20px);
+            transform: translateY(-15px);
             pointer-events: none;
             transition: all 0.4s ease;
+            display: none;
         }
 
-        /* إظهار صندوق تسجيل الدخول */
+        /* إظهار صندوق تسجيل الدخول ورفع المحتوى للأعلى ليظهر الزر بوضوح */
         .login-card.show {
             opacity: 1;
             transform: translateY(0);
             pointer-events: auto;
+            display: block;
         }
 
         .login-card h2 {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             color: #fff;
+            font-size: 20px;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             text-align: right;
         }
 
@@ -96,6 +93,7 @@
             display: block;
             margin-bottom: 5px;
             color: #bbb;
+            font-size: 14px;
         }
 
         .form-group input {
@@ -112,7 +110,7 @@
             border-color: #ffc107;
         }
 
-        /* زر الدخول بتصميم أنيق ومتقدم بدون لون أزرق مزعج */
+        /* زر الدخول */
         .login-btn {
             width: 100%;
             padding: 10px;
@@ -132,14 +130,15 @@
 
         #error-message {
             color: #ff4d4d;
-            margin-top: 10px;
-            font-size: 14px;
+            margin-top: 8px;
+            font-size: 13px;
         }
 
         /* واجهة الموقع بعد تسجيل الدخول */
         #welcome-screen {
             text-align: center;
             display: none;
+            margin-top: 20px;
         }
         #welcome-screen.show {
             display: block;
@@ -201,7 +200,7 @@
         const errorMessage = document.getElementById('error-message');
         const logoutBtn = document.getElementById('logout-btn');
 
-        // التفاعل مع الضغط على الأباجورة (تشغيل/إطفاء وإظهار/إخفاء)
+        // التفاعل مع الضغط على الأباجورة
         lampToggle.addEventListener('click', () => {
             if (welcomeScreen.classList.contains('show')) return;
 
@@ -217,7 +216,6 @@
 
             signInWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
-                    // إخفاء الأباجورة ونموذج الدخول وعرض الموقع
                     lampToggle.style.display = 'none';
                     document.querySelector('.lamp-cord').style.display = 'none';
                     loginContainer.classList.remove('show');
